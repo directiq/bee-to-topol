@@ -1,6 +1,10 @@
 import {WebFont, Module} from "./BeeTemplateTypes";
 
 export const convertFonts = (beeFonts: WebFont[]): string[] => {
+    if(!beeFonts){
+        return ["Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif"];
+    }
+
     return beeFonts.map(font => {
         return font.fontFamily;
     });
