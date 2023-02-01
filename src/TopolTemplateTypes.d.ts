@@ -9,7 +9,7 @@ export type TopolSection = {
         "border-left"?: string,
         "border-bottom"?: string,
         "in-group"?: boolean, //do not stack on mobile
-        "background-url"?: string,
+        "background-url"?: null | string,
         "background-size"?: string,
         "background-repeat"?: string,
         "css-class"?: "hide_section_on_desktop" | "hide_section_on_mobile",

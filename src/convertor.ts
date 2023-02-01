@@ -1,8 +1,8 @@
-import {TopolBlock, TopolColumn, TopolSection, TopolTemplate} from "./TopolTemplateTypes";
-import {BeeTemplate, Row, Column, WebFont, Module} from "./BeeTemplateTypes";
-import {v4 as uuidv4} from 'uuid';
-import {convertBlock} from "./blockConvertor";
-import {stringWithPxToNumeric, convertFonts} from "./helpers";
+import { TopolBlock, TopolColumn, TopolSection, TopolTemplate } from "./TopolTemplateTypes";
+import { BeeTemplate, Row, Column, WebFont, Module } from "./BeeTemplateTypes";
+import { v4 as uuidv4 } from 'uuid';
+import { convertBlock } from "./blockConvertor";
+import { stringWithPxToNumeric, convertFonts } from "./helpers";
 
 type ConvertorWarningMessage = {
     message: "unknown-module-type";
@@ -30,12 +30,12 @@ export default (beeTemplate: BeeTemplate, options?: convertorOptions) => {
 
         column.modules.forEach(module => {
 
-            const { block, notConvertedBlock} = convertBlock(module, columnWidth);
+            const { block, notConvertedBlock } = convertBlock(module, columnWidth);
 
             if (notConvertedBlock !== undefined) {
-                if(options !== undefined && options.convertors !== undefined) {
+                if (options !== undefined && options.convertors !== undefined) {
                     options.convertors.forEach(convertor => {
-                        if(module.type === convertor.key) {
+                        if (module.type === convertor.key) {
                             const transformedBlock = convertor.convert(notConvertedBlock, columnWidth, uuidv4());
                             blocks.push(transformedBlock);
                         }
@@ -50,27 +50,27 @@ export default (beeTemplate: BeeTemplate, options?: convertorOptions) => {
                 return;
             }
 
-            if(block !== undefined) {
+            if (block !== undefined) {
                 blocks.push(block);
             }
         });
-        
+
         function getPadding() {
             let leftPadding = '0px';
             let rightPadding = '0px';
             let topPadding = '0px';
             let bottomPadding = '0px';
 
-            if(column.style["padding-bottom"]) {
+            if (column.style["padding-bottom"]) {
                 bottomPadding = column.style["padding-bottom"];
             }
-            if(column.style["padding-left"]) {
+            if (column.style["padding-left"]) {
                 leftPadding = column.style["padding-left"];
             }
-            if(column.style["padding-right"]) {
+            if (column.style["padding-right"]) {
                 rightPadding = column.style["padding-right"];
             }
-            if(column.style["padding-top"]) {
+            if (column.style["padding-top"]) {
                 topPadding = column.style["padding-top"];
             }
 
@@ -119,31 +119,32 @@ export default (beeTemplate: BeeTemplate, options?: convertorOptions) => {
             }
             if (row.content.computedStyle.hideContentOnMobile) {
                 return "hide_section_on_mobile";
-            }  
+            }
 
             return undefined;
         }
 
         const getBackgroundUrl = () => {
 
-            if(row.content.style["background-image"]){
+            if (row.content.style["background-image"]) {
                 const rowStyleBgImage = row.content.style["background-image"]
-                .replace("url('", "")
-                .replace("')", "");
+                    .replace("url('", "")
+                    .replace("')", "");
 
-                if (rowStyleBgImage !== "none") {
-                    return rowStyleBgImage;
-                }   
+                if (rowStyleBgImage == "none") {
+                    return null;
+                }
+
+                return rowStyleBgImage;
             }
 
-            if(!row.container.style["background-image"]){
-                return 'none';
+            if (!row.container.style["background-image"]) {
+                return null;
             }
 
             return row.container.style["background-image"]
                 .replace("url('", "")
                 .replace("')", "");
-
         }
 
         const getBackgroundColor = () => {
@@ -162,7 +163,7 @@ export default (beeTemplate: BeeTemplate, options?: convertorOptions) => {
                 "full-width": false,
                 "background-color": getBackgroundColor(),
                 //this will be always 0px, padding is set only on columns
-                padding: "0px 0px 0px 0px", 
+                padding: "0px 0px 0px 0px",
                 "css-class": getCssClass(),
                 "background-url": getBackgroundUrl(),
                 // "background-position": row.content.style["background-position"], //TBD
@@ -206,7 +207,7 @@ export default (beeTemplate: BeeTemplate, options?: convertorOptions) => {
     }
 
     const getDefaultFont = () => {
-       return beeTemplate.page.body.content?.style["font-family"] || "Ubuntu, Helvetica, Arial, sans-serif"
+        return beeTemplate.page.body.content?.style["font-family"] || "Ubuntu, Helvetica, Arial, sans-serif"
     }
 
     const topolTemplate: TopolTemplate = {
